@@ -1,7 +1,5 @@
-from time import sleep
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from popup_utils import PopupHandler
+from game import Game
 
 #Keep browser open
 chrome_options = webdriver.ChromeOptions()
@@ -14,12 +12,6 @@ driver.maximize_window()
 
 driver.get('https://orteil.dashnet.org/cookieclicker/')
 
-popup_handler=PopupHandler(driver)
-
-popup_handler.close_popups()
-sleep(1)
-popup_handler.close_notes()
-
-GAME=driver.find_element(By.ID,'game')
+Game(driver).play()
 
 #driver.close()
