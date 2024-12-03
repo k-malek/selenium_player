@@ -14,4 +14,6 @@ driver.get('https://orteil.dashnet.org/cookieclicker/')
 
 Game(driver).play()
 
+#game.play()
+
 #driver.close()
