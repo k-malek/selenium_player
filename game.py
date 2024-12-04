@@ -1,9 +1,12 @@
 from time import sleep
+
+from selenium import webdriver
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.webdriver.common.by import By
+
 from popup_utils import PopupHandler
 from savestate import SaveStateHandler
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import ElementClickInterceptedException
+
 
 class Game():
 
@@ -20,7 +23,7 @@ class Game():
         self.popup_handler.close_notes()
         self.load_state()
 
-    def click_cookie(self,extended=False) -> None:
+    def click_cookie(self,extended:bool=False) -> None:
         clicks_amount=Game.CLICKS_PER_CYCLE * 10 if extended else Game.CLICKS_PER_CYCLE
         for _ in range(clicks_amount):
             try:
@@ -29,18 +32,13 @@ class Game():
             except ElementClickInterceptedException:
                 break
 
-    def pick_products(self) -> None:
+    def get_upgrade(self,source:str) -> None:
         while True:
-            products = self.driver.find_element(By.ID,'products').find_elements(By.CSS_SELECTOR,'div.enabled')
-            if products:
-                products[-1].click()
+            upgrades = self.driver.find_element(By.ID,source).find_elements(By.CSS_SELECTOR,'div.enabled')
+            if upgrades:
+                upgrades[-1].click()
             else:
-                break        
-
-    def pick_upgrade(self) -> None:
-        upgrades = self.driver.find_element(By.ID,'upgrades').find_elements(By.CSS_SELECTOR,'div.enabled')
-        if upgrades:
-            upgrades[-1].click()
+                break
 
     def click_golden_cookie(self) -> None:
         golden_cookie = self.driver.find_element(By.ID,'goldenCookie').find_elements(By.CSS_SELECTOR,'div')
@@ -53,13 +51,13 @@ class Game():
     def load_state(self) -> None:
         self.savestate_handler.load_state()
 
-    def play(self):
+    def play(self) -> None:
         self.setup_game()
         i=0
         while True:
             self.click_cookie(i==9)
-            self.pick_upgrade()
-            self.pick_products()
+            self.get_upgrade('upgrades')
+            self.get_upgrade('products')
             self.popup_handler.close_notes()
             if i==9:
                 self.save_state()

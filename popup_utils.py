@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import StaleElementReferenceException
 
 class PopupHandler:
-    
     def __init__(self,driver:webdriver) -> None:
         self.DRIVER = driver
 
